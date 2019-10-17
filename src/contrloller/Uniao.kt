@@ -16,18 +16,10 @@ class Uniao {
         inicais.add("qi")
 
         afd1.fim.forEach {
-            if (it.contains('*')){
-                var s = it.split("*")
-                finais.add(s[1])
-            }
-            else finais.add(it)
+            finais.add(it)
         }
         afd2.fim.forEach {
-            if (it.contains('*')){
-                var s = it.split("*")
-                finais.add(s[1])
-            }
-            else finais.add(it)
+            finais.add(it)
         }
 
         afd1.alfabeto.forEach {
@@ -76,13 +68,21 @@ class Uniao {
 
         afd1.fim.forEach {
             if (it.contains(afd1.inicio))
-                if (!finais.contains("qi"))
-                    finais.add("qi")
+                if (!finais.contains("*qi"))
+                    finais.add("*qi")
         }
         afd2.fim.forEach {
             if (it.contains(afd2.inicio))
-                if (!finais.contains("qi"))
-                    finais.add("qi")
+                if (!finais.contains("*qi"))
+                    finais.add("*qi")
+        }
+        trasicoes.forEach {
+            finais.forEach { f ->
+                //if (f.contains(it.inicial))
+                    //it.inicial = "*${it.inicial}"
+                if (f.contains(it.final))
+                    it.final = "*${it.final}"
+            }
         }
         afnl = Afnl(inicais[0], finais, alfabetos, estados, trasicoes)
         return afnl
