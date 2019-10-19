@@ -69,8 +69,7 @@ fun main(){
             afnl_combinacao = combinacao.combinacao(afd1)
 
             fluxo.printarAfnl(afnl_combinacao, "Combinação")
-            fecho.fechoLambda(afnl_combinacao)
-
+            fecho.fechoLambda(afnl_combinacao, afnl_combinacao.inicio)
         }
         1 -> {
             val uniao = Uniao()
@@ -117,7 +116,7 @@ fun main(){
 
             afnl_uniao = uniao.uniao(afd1,afd2)
             fluxo.printarAfnl(afnl_uniao, "União")
-            fecho.fechoLambda(afnl_uniao)
+            fecho.fechoLambda(afnl_uniao, afnl_uniao.inicio)
         }
         2 -> {
             val intececcao = Interceccao()
@@ -164,7 +163,7 @@ fun main(){
             afnl_interceccao = intececcao.intececcao(afd1, afd2)
             fluxo.printarAfnl(afnl_interceccao, "Intercecção")
             println()
-            fecho.fechoLambda(afnl_interceccao)
+            fecho.fechoLambda(afnl_interceccao, afnl_interceccao.inicio)
         }
         3 -> {
             val concatenacao = Concatenacao()
@@ -210,7 +209,7 @@ fun main(){
             afnl_concatenacao = concatenacao.concatencacao(afd1, afd2)
             fluxo.printarAfnl(afnl_concatenacao, "Concatenação")
             println()
-            fecho.fechoLambda(afnl_concatenacao)
+            fecho.fechoLambda(afnl_concatenacao, afnl_concatenacao.inicio)
         }
     }
 

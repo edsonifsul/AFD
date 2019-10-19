@@ -12,11 +12,14 @@ class Concatenacao {
         val alfabetos = mutableListOf<String>()
         val estados = mutableListOf<String>()
         val trasicoes = mutableListOf<Transicoes>()
-        var aux = Transicoes()
+
+
+
 
         inicais = afd1.inicio
 
         afd1.fim.forEach {
+            val aux = Transicoes()
             val inicio: String
             if (it.contains('*')){
                 inicio=it.replace("*","")

@@ -5,7 +5,7 @@ import java.io.*
 class arquivo {
 
     fun arquivo () :BufferedReader{
-        val bufferedReader = File("entrada.dat").bufferedReader()
+        val bufferedReader = File("entrada3.dat").bufferedReader()
         return bufferedReader
         /*val lineList = mutableListOf<String>()
 

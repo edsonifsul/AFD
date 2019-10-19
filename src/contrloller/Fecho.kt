@@ -7,43 +7,35 @@ import model.Transicoes
 
 class Fecho {
     val tabelaTransicoes = mutableListOf<Transicoes>()
-    val fecho = mutableListOf<FechoModel>()
-    fun fechoLambda(afd: Afnl) {
+    val fecho = FechoModel()
+
+
+
+    fun fechoLambda(afnl: Afnl, estado: String): FechoModel {
 
         var aux = FechoModel()
-
-        afd.transicoes.forEach {
-            if (it.entrada == "lambda")
-                if (fecho.isEmpty()){
-                    aux.estado = it.inicial
-                    aux.entrada = it.entrada
-                    aux.fecho = it.final
-                    fecho.add(aux)
-                }else{
-                    fecho.forEach { f ->
-                        if (f.estado == it.inicial)
-                            f.fecho = f.fecho + it.final
-                        else{
-                            aux.estado = it.inicial
-                            aux.entrada = it.entrada
-                            aux.fecho = it.final
-                            fecho.add(aux)
-                        }
-                    }
+        afnl.transicoes.forEach {
+            if (it.inicial == estado) {
+                if (it.entrada == "lambda"){
+                    if (!aux.estado.contains(it.inicial))aux.estado = it.inicial
+                    if (!aux.entrada.contains(it.entrada))aux.entrada = it.entrada
+                    if (!aux.fecho.contains(aux.estado)) aux.fecho = aux.estado
+                    if (!aux.fecho.contains(it.final)) aux.fecho = aux.fecho + it.final
                 }
+            }
         }
+        /*
         println()
-        fecho.forEach {
-            print(it.estado)
-            print(" ${it.entrada} ")
-            println(it.fecho)
-        }
+        print(aux.estado)
+        print(" ${aux.entrada} ")
+        println(aux.fecho)
+         */
+        return aux
     }
 
     fun afnd(afnl: Afnl, fecho: List<FechoModel>){
         val afd: Afd
         var aux = Transicoes()
-        var cont = -1
         val transicoes = mutableListOf<Transicoes>()
         afnl.transicoes.forEach {
             transicoes.add(it)
@@ -61,6 +53,19 @@ class Fecho {
                         if (it.entrada.contains(transicao.entrada))
                             if (!it.final.contains(transicao.final))
                                 it.final = it.final + transicao.final
+                        else{
+                                aux.inicial = transicao.inicial
+                                aux.entrada = transicao.entrada
+                                aux.final = transicao.final
+                                tabelaTransicoes.add(aux)
+                            }
+                    else{
+                            aux.inicial = transicao.inicial
+                            aux.entrada = transicao.entrada
+                            aux.final = transicao.final
+                            tabelaTransicoes.add(aux)
+                        }
+
                 }
             }
         }
