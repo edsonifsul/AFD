@@ -74,7 +74,7 @@ fun main(){
         1 -> {
             val uniao = Uniao()
             val fecho = Fecho()
-            val f: List<FechoModel>
+            val fechoLambda: FechoModel
 
             estados = lineList[1].split(',')
             alfabeto = lineList[2].split(',')
@@ -116,7 +116,8 @@ fun main(){
 
             afnl_uniao = uniao.uniao(afd1,afd2)
             fluxo.printarAfnl(afnl_uniao, "União")
-            fecho.fechoLambda(afnl_uniao, afnl_uniao.inicio)
+            fechoLambda = fecho.fechoLambda(afnl_uniao, afnl_uniao.inicio)
+            fecho.conversao(afnl_uniao, fechoLambda)
         }
         2 -> {
             val intececcao = Interceccao()

@@ -21,6 +21,10 @@ class Fecho {
                     if (!aux.entrada.contains(it.entrada))aux.entrada = it.entrada
                     if (!aux.fecho.contains(aux.estado)) aux.fecho = aux.estado
                     if (!aux.fecho.contains(it.final)) aux.fecho = aux.fecho + it.final
+                }else{
+                    aux.estado = it.inicial
+                    aux.entrada = it.entrada
+                    aux.fecho = it.final
                 }
             }
         }
@@ -33,41 +37,73 @@ class Fecho {
         return aux
     }
 
-    fun afnd(afnl: Afnl, fecho: List<FechoModel>){
-        val afd: Afd
-        var aux = Transicoes()
+    fun conversao(afnl: Afnl, fecho: FechoModel){
+
+        var t = Transicoes()
         val transicoes = mutableListOf<Transicoes>()
+        val alphabeto = mutableListOf<String>()
+        t.inicial = fecho.fecho
+        t.entrada = afnl.transicoes[0].entrada
+        t.final = ""
         afnl.transicoes.forEach {
-            transicoes.add(it)
+            if (it.entrada != "lambda")
+                transicoes.add(it)
         }
-
-        aux.inicial = transicoes[0].inicial
-        aux.entrada = transicoes[0].entrada
-        aux.final = transicoes[0].final
-        tabelaTransicoes.add(aux)
+        afnl.alfabeto.forEach {
+            alphabeto.add(it)
+        }
+        alphabeto.remove("lambda")
         var controle = false
-        while (controle == false){
-            tabelaTransicoes.forEach {
-                transicoes.forEach { transicao ->
-                    if (it.inicial.contains(transicao.inicial))
-                        if (it.entrada.contains(transicao.entrada))
-                            if (!it.final.contains(transicao.final))
-                                it.final = it.final + transicao.final
-                        else{
-                                aux.inicial = transicao.inicial
-                                aux.entrada = transicao.entrada
-                                aux.final = transicao.final
-                                tabelaTransicoes.add(aux)
-                            }
-                    else{
-                            aux.inicial = transicao.inicial
-                            aux.entrada = transicao.entrada
-                            aux.final = transicao.final
-                            tabelaTransicoes.add(aux)
-                        }
+        var cont = 0
 
+        tabelaTransicoes.clear()
+        while (controle == false){
+            val tbaux = mutableListOf<Transicoes>()
+            if (tabelaTransicoes.isEmpty()) tbaux.add(t)
+            else{
+                tabelaTransicoes.forEach {
+                    tbaux.add(it)
                 }
             }
+
+            tbaux.forEach {
+                alphabeto.forEach { alpha ->
+                    transicoes.forEach { item ->
+                        if (it.inicial.contains(item.inicial)) {
+                            if (item.entrada == alpha) {
+                                if (!it.final.contains(item.final)) {
+                                    it.entrada = alpha
+                                    it.final = it.final + item.final
+                                    if (!tabelaTransicoes.contains(it)) tabelaTransicoes.add(it)
+                                }
+                            }
+                        }
+                    }
+                }
+                var cont = 0
+                tabelaTransicoes.forEach { item ->
+                    if (it.final.equals(item.inicial))
+                        cont++
+                }
+
+                if (cont == 0) {
+                    val aux = Transicoes()
+                    aux.inicial = it.final
+                    tabelaTransicoes.add(aux)
+                }
+            }
+            cont++
+            if (cont > 100) controle = true
+        }
+        val v = mutableListOf<String>()
+        v.add("")
+        val afd: Afd
+        afd = Afd(fecho.fecho, v, afnl.alfabeto, v, tabelaTransicoes )
+        println()
+        tabelaTransicoes.forEach {
+            print(it.inicial)
+            print(" ${it.entrada} ")
+            println(it.final)
         }
 
         //return afd

@@ -73,9 +73,10 @@ class Uniao {
         }
         afd2.fim.forEach {
             if (it.contains(afd2.inicio))
-                if (!finais.contains("*qi"))
-                    finais.add("*qi")
+                if (!finais.contains("qi"))
+                    finais.add("qi")
         }
+        /*
         trasicoes.forEach {
             finais.forEach { f ->
                 //if (f.contains(it.inicial))
@@ -84,6 +85,8 @@ class Uniao {
                     it.final = "*${it.final}"
             }
         }
+
+         */
         afnl = Afnl(inicais[0], finais, alfabetos, estados, trasicoes)
         return afnl
     }
