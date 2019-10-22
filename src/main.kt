@@ -46,7 +46,7 @@ fun main(){
         4 -> {
             val combinacao = Combinacao()
             val fecho = Fecho()
-            val f: List<FechoModel>
+            val fechoLambda: FechoModel
             estados = lineList[1].split(',')
             alfabeto = lineList[2].split(',')
             while (lineList[i].contains(">")!=true){
@@ -69,7 +69,8 @@ fun main(){
             afnl_combinacao = combinacao.combinacao(afd1)
 
             fluxo.printarAfnl(afnl_combinacao, "Combinação")
-            fecho.fechoLambda(afnl_combinacao, afnl_combinacao.inicio)
+            fechoLambda = fecho.fechoLambda(afnl_combinacao, afnl_combinacao.inicio)
+            fecho.conversao(afnl_combinacao,fechoLambda)
         }
         1 -> {
             val uniao = Uniao()
@@ -117,11 +118,12 @@ fun main(){
             afnl_uniao = uniao.uniao(afd1,afd2)
             fluxo.printarAfnl(afnl_uniao, "União")
             fechoLambda = fecho.fechoLambda(afnl_uniao, afnl_uniao.inicio)
-            fecho.conversao(afnl_uniao, fechoLambda, operacao)
+            fecho.conversao(afnl_uniao, fechoLambda)
         }
         2 -> {
             val intececcao = Interceccao()
             val fecho = Fecho()
+            val fechoLambda: FechoModel
 
             estados = lineList[1].split(',')
             alfabeto = lineList[2].split(',')
@@ -163,12 +165,13 @@ fun main(){
 
             afnl_interceccao = intececcao.intececcao(afd1, afd2)
             fluxo.printarAfnl(afnl_interceccao, "Intercecção")
-            println()
-            fecho.fechoLambda(afnl_interceccao, afnl_interceccao.inicio)
+            fechoLambda = fecho.fechoLambda(afnl_interceccao, afnl_interceccao.inicio)
+            fecho.conversao(afnl_interceccao,fechoLambda)
         }
         3 -> {
             val concatenacao = Concatenacao()
             val fecho = Fecho()
+            val fechoLambda: FechoModel
 
             estados = lineList[1].split(',')
             alfabeto = lineList[2].split(',')
@@ -209,8 +212,8 @@ fun main(){
             afd2 = Afd(inicio, fim, alfabeto, estados, transicao2)
             afnl_concatenacao = concatenacao.concatencacao(afd1, afd2)
             fluxo.printarAfnl(afnl_concatenacao, "Concatenação")
-            println()
-            fecho.fechoLambda(afnl_concatenacao, afnl_concatenacao.inicio)
+            fechoLambda = fecho.fechoLambda(afnl_concatenacao, afnl_concatenacao.inicio)
+            fecho.conversao(afnl_concatenacao,fechoLambda)
         }
     }
 

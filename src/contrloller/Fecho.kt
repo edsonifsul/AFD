@@ -21,10 +21,6 @@ class Fecho {
                     if (!aux.entrada.contains(it.entrada))aux.entrada = it.entrada
                     if (!aux.fecho.contains(aux.estado)) aux.fecho = aux.estado
                     if (!aux.fecho.contains(it.final)) aux.fecho = aux.fecho + it.final
-                }else{
-                    aux.estado = it.inicial
-                    aux.entrada = it.entrada
-                    aux.fecho = it.final
                 }
             }
         }
@@ -33,17 +29,17 @@ class Fecho {
         print(aux.estado)
         print(" ${aux.entrada} ")
         println(aux.fecho)
-         */
+        */
         return aux
     }
 
-    fun conversao(afnl: Afnl, fecho: FechoModel, operacao: Int){
+    fun conversao(afnl: Afnl, fecho: FechoModel){
 
         var t = Transicoes()
         val transicoes = mutableListOf<Transicoes>()
         val alphabeto = mutableListOf<String>()
         t.inicial = fecho.fecho
-        t.entrada = afnl.transicoes[0].entrada
+        t.entrada = afnl.alfabeto[0]
         t.final = ""
         afnl.transicoes.forEach {
             if (it.entrada != "lambda")
@@ -76,7 +72,7 @@ class Fecho {
                                     it.final = it.final + item.final
                                     if (!tabelaTransicoes.contains(it)) tabelaTransicoes.add(it)
                                 }
-                            }/*else{
+                            }else{
                                 if (!it.final.contains(item.final)){
                                     val aux = Transicoes()
                                     aux.inicial = it.inicial
@@ -85,7 +81,6 @@ class Fecho {
                                     if (!tabelaTransicoes.contains(aux)) tabelaTransicoes.add(aux)
                                 }
                             }
-                            */
                         }
                     }
                 }
@@ -109,7 +104,7 @@ class Fecho {
         cont = 0
         println()
         tabelaTransicoes.forEach {
-            estados.add(it.inicial)
+            if (!estados.contains(it.inicial)) estados.add(it.inicial)
         }
         //criação da lista
         afnl.fim.forEach {
@@ -118,8 +113,6 @@ class Fecho {
                     if (!finais.contains(item)) finais.add(item)
             }
         }
-
-        var tbtransicao = mutableListOf<Transicoes>()
 
         println("Estados Renomeados:")
         estados.forEach {
