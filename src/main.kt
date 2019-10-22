@@ -117,7 +117,7 @@ fun main(){
             afnl_uniao = uniao.uniao(afd1,afd2)
             fluxo.printarAfnl(afnl_uniao, "União")
             fechoLambda = fecho.fechoLambda(afnl_uniao, afnl_uniao.inicio)
-            fecho.conversao(afnl_uniao, fechoLambda)
+            fecho.conversao(afnl_uniao, fechoLambda, operacao)
         }
         2 -> {
             val intececcao = Interceccao()

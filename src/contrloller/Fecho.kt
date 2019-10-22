@@ -37,7 +37,7 @@ class Fecho {
         return aux
     }
 
-    fun conversao(afnl: Afnl, fecho: FechoModel){
+    fun conversao(afnl: Afnl, fecho: FechoModel, operacao: Int){
 
         var t = Transicoes()
         val transicoes = mutableListOf<Transicoes>()
@@ -76,7 +76,16 @@ class Fecho {
                                     it.final = it.final + item.final
                                     if (!tabelaTransicoes.contains(it)) tabelaTransicoes.add(it)
                                 }
+                            }/*else{
+                                if (!it.final.contains(item.final)){
+                                    val aux = Transicoes()
+                                    aux.inicial = it.inicial
+                                    aux.entrada = alpha
+                                    aux.final = it.final + item.final
+                                    if (!tabelaTransicoes.contains(aux)) tabelaTransicoes.add(aux)
+                                }
                             }
+                            */
                         }
                     }
                 }
@@ -95,18 +104,58 @@ class Fecho {
             cont++
             if (cont > 100) controle = true
         }
-        val v = mutableListOf<String>()
-        v.add("")
-        val afd: Afd
-        afd = Afd(fecho.fecho, v, afnl.alfabeto, v, tabelaTransicoes )
+        val finais = mutableListOf<String>()
+        val estados = mutableListOf<String>()
+        cont = 0
         println()
+        tabelaTransicoes.forEach {
+            estados.add(it.inicial)
+        }
+        //criação da lista
+        afnl.fim.forEach {
+            estados.forEach { item ->
+                if (item.contains(it))
+                    if (!finais.contains(item)) finais.add(item)
+            }
+        }
+
+        var tbtransicao = mutableListOf<Transicoes>()
+
+        println("Estados Renomeados:")
+        estados.forEach {
+            print("$it: ")
+            println("p$cont")
+            cont++
+        }
+        val inicio = tabelaTransicoes[0].inicial
+
+
+        println()
+        println("AFD resultante da Conversão:")
+        print("Estados: ")
+        estados.forEach {
+            print("$it ")
+        }
+        println()
+        print("Alfabeto: ")
+        alphabeto.forEach {
+            print("$it ")
+        }
+        println()
+        println("Transições:")
         tabelaTransicoes.forEach {
             print(it.inicial)
             print(" ${it.entrada} ")
             println(it.final)
         }
+        println("Inicial: $inicio")
+        print("Finais: ")
+        finais.forEach {
+            print("$it ")
+        }
 
-        //return afd
+        val afd: Afd
+        afd = Afd(inicio, finais, alphabeto, estados, tabelaTransicoes )
     }
 }
 /*

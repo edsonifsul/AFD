@@ -16,10 +16,12 @@ class Uniao {
         inicais.add("qi")
 
         afd1.fim.forEach {
-            finais.add(it)
+            val final = it.replace("*","")
+            if (!finais.contains(final)) finais.add(final)
         }
         afd2.fim.forEach {
-            finais.add(it)
+            val final = it.replace("*","")
+            if (!finais.contains(final)) finais.add(final)
         }
 
         afd1.alfabeto.forEach {
@@ -68,8 +70,8 @@ class Uniao {
 
         afd1.fim.forEach {
             if (it.contains(afd1.inicio))
-                if (!finais.contains("*qi"))
-                    finais.add("*qi")
+                if (!finais.contains("qi"))
+                    finais.add("qi")
         }
         afd2.fim.forEach {
             if (it.contains(afd2.inicio))
