@@ -17,7 +17,8 @@ class Combinacao {
         inicais = "qi"
 
         afd1.fim.forEach {
-            finais.add(it)
+            val final = it.replace("*","")
+            if (!finais.contains(final)) finais.add(final)
             val aux = Transicoes()
             val inicial: String
             if (it.contains('*')){
@@ -26,7 +27,7 @@ class Combinacao {
             }else aux.inicial=it
             aux.entrada="lambda"
             aux.final=afd1.inicio
-            trasicoes.add(aux)
+            if (aux.inicial != aux.final) trasicoes.add(aux)
         }
 
         afd1.alfabeto.forEach {
@@ -49,7 +50,7 @@ class Combinacao {
         aux.final=afd1.inicio
         trasicoes.add(aux)
 
-        finais.add("*qi")
+        finais.add("qi")
 
         afnl = Afnl(inicais, finais, alfabetos, estados, trasicoes)
         return afnl

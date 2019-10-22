@@ -72,12 +72,15 @@ class Fecho {
          */
         tabelaTransicoes.clear()
         while (controle == false){
-            //
+            /*
+            Cria uma lista de Transições para trabalhar com a iteração do
+            forEach na lista de transições e inserir as novas transições na lista
+             */
             val tbaux = mutableListOf<Transicoes>()
             if (tabelaTransicoes.isEmpty()) tbaux.add(t)
             else{
                 tabelaTransicoes.forEach {
-                    tbaux.add(it)
+                    if (!tbaux.contains(it)) tbaux.add(it)
                 }
             }
 
@@ -137,7 +140,7 @@ class Fecho {
 
         /*
         mapa de estados para realizar a criação do arquivo de saída
-        com os estados renomeados
+        com os estados renomeados e popula esse mapa
          */
         val estadosMap = mutableMapOf<String, String>()
         println("Estados Renomeados:")
@@ -149,9 +152,18 @@ class Fecho {
             print("${it.key}: ")
             println(it.value)
         }
+
+        /*
+        a função fechoLambda desse modelo garante que a primeira transição
+        inicial da tabela de transições seja o estado inicial
+        do afd resultante da conversão
+         */
         val inicio = tabelaTransicoes[0].inicial
 
-
+        /*
+        printa o AFD resultante da conversão no console para controle
+        ou para verificação
+         */
         println()
         println("AFD resultante da Conversão:")
         print("Estados: ")
@@ -176,10 +188,14 @@ class Fecho {
             print("$it ")
         }
 
+        //Inicio da gravação do arquivo de saída
         val arquivo = arquivo()
         val bufferedWriter: BufferedWriter
         bufferedWriter = arquivo.gravaArquivo()
 
+        /*
+        Usando o mapa gerado, insere no arquivo o valor referente ao estado
+         */
         var tamanho = estadosMap.size
         estadosMap.forEach{
             if (--tamanho > 0) bufferedWriter.write("${it.value},")

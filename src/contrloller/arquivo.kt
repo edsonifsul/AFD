@@ -5,7 +5,7 @@ import java.io.*
 class arquivo {
 
     fun arquivo () :BufferedReader{
-        val bufferedReader = File("entrada3.dat").bufferedReader()
+        val bufferedReader = File("entrada2.dat").bufferedReader()
         return bufferedReader
         /*val lineList = mutableListOf<String>()
 
@@ -13,6 +13,7 @@ class arquivo {
         lineList.forEach { println("> " + it)}*/
     }
 
+    //Função para gravar no arquivo de saída
     fun gravaArquivo() :BufferedWriter{
         val bufferedWriter = File("saida.dat").bufferedWriter()
         return bufferedWriter
