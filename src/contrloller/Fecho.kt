@@ -4,6 +4,7 @@ import model.Afd
 import model.Afnl
 import model.FechoModel
 import model.Transicoes
+import java.io.BufferedWriter
 
 class Fecho {
     val tabelaTransicoes = mutableListOf<Transicoes>()
@@ -12,7 +13,11 @@ class Fecho {
 
 
     fun fechoLambda(afnl: Afnl, estado: String): FechoModel {
-
+        /*
+        função para realizar a operação ECLOSE descrita nas páginas
+        83 - 86 do livro do Hopcroft.
+        Verifica se existem transições lambda e as elimina.
+         */
         var aux = FechoModel()
         afnl.transicoes.forEach {
             if (it.inicial == estado) {
@@ -21,6 +26,12 @@ class Fecho {
                     if (!aux.entrada.contains(it.entrada))aux.entrada = it.entrada
                     if (!aux.fecho.contains(aux.estado)) aux.fecho = aux.estado
                     if (!aux.fecho.contains(it.final)) aux.fecho = aux.fecho + it.final
+                }else{
+                    val aux2 = FechoModel()
+                    aux2.estado = aux.estado
+                    aux2.entrada = it.entrada
+                    aux2.fecho = aux.fecho + it.final
+                    return aux2
                 }
             }
         }
@@ -34,26 +45,34 @@ class Fecho {
     }
 
     fun conversao(afnl: Afnl, fecho: FechoModel){
-
+        /*
+        função para realizar a conversão do afnlambda para o afd
+        utilizando o conceito de ECLOSE. Esse processo suprime a conversão para
+        o afnd passando direto para o afd correspondente
+         */
         var t = Transicoes()
         val transicoes = mutableListOf<Transicoes>()
         val alphabeto = mutableListOf<String>()
-        t.inicial = fecho.fecho
-        t.entrada = afnl.alfabeto[0]
-        t.final = ""
+        t.inicial = fecho.estado
+        t.entrada = fecho.entrada
+        t.final = fecho.fecho
         afnl.transicoes.forEach {
             if (it.entrada != "lambda")
                 transicoes.add(it)
         }
         afnl.alfabeto.forEach {
-            alphabeto.add(it)
+            if (it != "lambda")
+                alphabeto.add(it)
         }
-        alphabeto.remove("lambda")
+
         var controle = false
         var cont = 0
-
+        /* torna vazio a tabelaTrasicoes para garantir
+        um critério de parada válido
+         */
         tabelaTransicoes.clear()
         while (controle == false){
+            //
             val tbaux = mutableListOf<Transicoes>()
             if (tabelaTransicoes.isEmpty()) tbaux.add(t)
             else{
@@ -96,8 +115,10 @@ class Fecho {
                     tabelaTransicoes.add(aux)
                 }
             }
-            cont++
+            /*cont++
             if (cont > 100) controle = true
+             */
+            if (tbaux == tabelaTransicoes) controle = true
         }
         val finais = mutableListOf<String>()
         val estados = mutableListOf<String>()
@@ -114,11 +135,19 @@ class Fecho {
             }
         }
 
+        /*
+        mapa de estados para realizar a criação do arquivo de saída
+        com os estados renomeados
+         */
+        val estadosMap = mutableMapOf<String, String>()
         println("Estados Renomeados:")
         estados.forEach {
-            print("$it: ")
-            println("p$cont")
+            estadosMap[it] = "p$cont"
             cont++
+        }
+        estadosMap.forEach{
+            print("${it.key}: ")
+            println(it.value)
         }
         val inicio = tabelaTransicoes[0].inicial
 
@@ -147,28 +176,36 @@ class Fecho {
             print("$it ")
         }
 
-        val afd: Afd
-        afd = Afd(inicio, finais, alphabeto, estados, tabelaTransicoes )
+        val arquivo = arquivo()
+        val bufferedWriter: BufferedWriter
+        bufferedWriter = arquivo.gravaArquivo()
+
+        var tamanho = estadosMap.size
+        estadosMap.forEach{
+            if (--tamanho > 0) bufferedWriter.write("${it.value},")
+            else bufferedWriter.write(it.value)
+        }
+        bufferedWriter.newLine()
+        tamanho = alphabeto.size
+        alphabeto.forEach {
+            if (--tamanho > 0) bufferedWriter.write("${it},")
+            else bufferedWriter.write(it)
+        }
+        bufferedWriter.newLine()
+        tabelaTransicoes.forEach {
+            bufferedWriter.write(estadosMap[it.inicial])
+            bufferedWriter.write(",${it.entrada},")
+            bufferedWriter.write(estadosMap[it.final])
+            bufferedWriter.newLine()
+        }
+        bufferedWriter.write(">${estadosMap[inicio]}")
+        bufferedWriter.newLine()
+        bufferedWriter.write("*")
+        tamanho = finais.size
+        finais.forEach {
+            if (--tamanho > 0) bufferedWriter.write("${estadosMap[it]},")
+            else bufferedWriter.write("${estadosMap[it]}")
+        }
+        bufferedWriter.close()
     }
 }
-/*
-if (aux.entrada == "lambda"){
-                if (it.entrada == "lambda")
-                    aux.final = aux.final + it.final
-                tabelaTransicoes.add(aux)
-                aux.entrada = ""
-            }else if (aux.entrada == ""){
-                if (it.entrada == "lambda"){
-                    aux.inicial = it.inicial
-                    aux.entrada = it.entrada
-                    aux.final = it.final
-                }else{
-                    aux.final = aux.final + it.final
-                    aux.entrada = "*"
-                }
-            }else{
-                if (it.entrada == "lambda"){
-
-                }
-            }
- */

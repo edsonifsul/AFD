@@ -12,4 +12,9 @@ class arquivo {
         bufferedReader.useLines { lines -> lines.forEach { lineList.add(it) } }
         lineList.forEach { println("> " + it)}*/
     }
+
+    fun gravaArquivo() :BufferedWriter{
+        val bufferedWriter = File("saida.dat").bufferedWriter()
+        return bufferedWriter
+    }
 }
